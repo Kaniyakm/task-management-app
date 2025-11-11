@@ -13,9 +13,15 @@ const taskDeadlineInput = document.getElementById('taskDeadline');
 const taskStatusInput = document.getElementById('taskStatus');
 const addTaskBtn = document.getElementById('addTaskBtn');
 const taskList = document.getElementById('taskList');
+const filterStatus = document.getElementById('filterStatus');
+const filterCategory = document.getElementById('filterCategory');
+
 
 //  STEP 3: EVENT LISTENER FOR ADD BUTTON 
 addTaskBtn.addEventListener('click', addTask);
+filterStatus.addEventListener('change', displayTasks);
+filterCategory.addEventListener('input', displayTasks);
+
 
 // STEP 4: FUNCTION TO ADD NEW TASK 
 function addTask() {
@@ -50,14 +56,25 @@ function addTask() {
 }
 
 // STEP 5: FUNCTION TO DISPLAY TASKS 
-
 function displayTasks() {
   taskList.innerHTML = '';
 
-  tasks.forEach((task, index) => {
+  // Apply filters before rendering
+  const statusFilter = filterStatus.value;
+  const categoryFilter = filterCategory.value.toLowerCase();
+
+  const filteredTasks = tasks.filter(task => {
+    const statusMatch = statusFilter === 'All' || task.status === statusFilter;
+    const categoryMatch =
+      categoryFilter === '' ||
+      task.category.toLowerCase().includes(categoryFilter);
+    return statusMatch && categoryMatch;
+  });
+
+  // Render only filtered tasks
+  filteredTasks.forEach((task, index) => {
     const li = document.createElement('li');
 
-// Highlight overdue tasks
     if (task.status === "Overdue") {
       li.style.color = "red";
       li.style.fontWeight = "bold";
@@ -71,9 +88,11 @@ function displayTasks() {
       </select>
       <span>Current: ${task.status}</span>
     `;
+
     taskList.appendChild(li);
   });
 }
+
 
 // Function to update status
 function updateTaskStatus(index, newStatus) {
