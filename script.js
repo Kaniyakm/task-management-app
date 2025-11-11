@@ -46,20 +46,19 @@ function addTask() {
   }
 
   // Add task
-  tasks.push(task);
+  // Add to array
+tasks.push(task);
 
-  // Save to local storage
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+// Clear input fields
+taskNameInput.value = '';
+taskCategoryInput.value = '';
+taskDeadlineInput.value = '';
+taskStatusInput.value = 'In Progress';
 
-  // Clear input fields
-  taskNameInput.value = '';
-  taskCategoryInput.value = '';
-  taskDeadlineInput.value = '';
-  taskStatusInput.value = 'In Progress';
+// Check overdue and update display
+checkOverdueTasks();
+displayTasks();
 
-  // Refresh display
-  displayTasks();
-}
 
 // STEP 5: FUNCTION TO DISPLAY TASKS 
 function displayTasks() {
@@ -129,18 +128,23 @@ function deleteTask(index) {
 }
 
 // STEP 7: FUNCTION TO CHECK OVERDUE TASKS 
+
 function checkOverdueTasks() {
-  const today = new Date().toISOString().split("T")[0]; // today's date (YYYY-MM-DD)
+  const currentDate = new Date();
 
   tasks.forEach(task => {
-    if (task.deadline && task.deadline < today && task.status !== "Completed") {
+    const deadlineDate = new Date(task.deadline);
+
+    // If deadline is past and not completed
+    if (deadlineDate < currentDate && task.status !== "Completed") {
       task.status = "Overdue";
     }
   });
 
+  // Save changes to local storage
   localStorage.setItem("tasks", JSON.stringify(tasks));
-  displayTasks();
 }
+
 
 // STEP 8: INITIALIZE APP ON PAGE LOAD 
 checkOverdueTasks();
