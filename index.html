@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task Management App</title>
   <link rel="stylesheet" href="style.css">
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </head>
 
 <body>
@@ -25,18 +25,19 @@
   </div>
 
   <!-- Filter Section -->
-  <div class="filters">
-    <select id="filterCategory">
-      <option value="All">All Categories</option>
-    </select>
-
+   <div id="filters">
+    <label for="filterStatus">Filter by Status:</label>
     <select id="filterStatus">
-      <option value="All">All Statuses</option>
+      <option value="All">All</option>
       <option value="In Progress">In Progress</option>
       <option value="Completed">Completed</option>
       <option value="Overdue">Overdue</option>
     </select>
+
+    <label for="filterCategory">Filter by Category:</label>
+    <input type="text" id="filterCategory" placeholder="e.g. Work, Personal">
   </div>
+
 
   <!-- Task List -->
   <ul id="taskList"></ul>

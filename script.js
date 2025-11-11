@@ -19,6 +19,12 @@ const filterCategory = document.getElementById('filterCategory');
 
 //  STEP 3: EVENT LISTENER FOR ADD BUTTON 
 addTaskBtn.addEventListener('click', addTask);
+taskList.addEventListener('click', function (event) {
+  if (event.target.classList.contains('delete-btn')) {
+    const index = event.target.getAttribute('data-index');
+    deleteTask(index);
+  }
+});
 filterStatus.addEventListener('change', displayTasks);
 filterCategory.addEventListener('input', displayTasks);
 
@@ -81,13 +87,19 @@ function displayTasks() {
     }
 
     li.innerHTML = `
-      <strong>${task.name}</strong> (${task.category}) - Due: ${task.deadline}
-      <select onchange="updateTaskStatus(${index}, this.value)">
-        <option value="In Progress" ${task.status === "In Progress" ? "selected" : ""}>In Progress</option>
-        <option value="Completed" ${task.status === "Completed" ? "selected" : ""}>Completed</option>
-      </select>
-      <span>Current: ${task.status}</span>
-    `;
+  <div>
+    <strong>${task.name}</strong> (${task.category}) - Due: ${task.deadline}
+  </div>
+  <div>
+    <select onchange="updateTaskStatus(${index}, this.value)">
+      <option value="In Progress" ${task.status === "In Progress" ? "selected" : ""}>In Progress</option>
+      <option value="Completed" ${task.status === "Completed" ? "selected" : ""}>Completed</option>
+    </select>
+    <button class="delete-btn" data-index="${index}">🗑️ Delete</button>
+  </div>
+  <span>Current: ${task.status}</span>
+`;
+
 
     taskList.appendChild(li);
   });
@@ -98,6 +110,21 @@ function displayTasks() {
 function updateTaskStatus(index, newStatus) {
   tasks[index].status = newStatus;
   localStorage.setItem("tasks", JSON.stringify(tasks));
+  displayTasks();
+}
+
+// Function to Add the delete function
+function deleteTask(index) {
+  const confirmDelete = confirm("Are you sure you want to delete this task?");
+  if (!confirmDelete) return;
+
+  // Remove from array
+  tasks.splice(index, 1);
+
+  // Update local storage
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+
+  // Re-render list
   displayTasks();
 }
 
