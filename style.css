@@ -1,0 +1,13 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.task-input {
+  margin-bottom: 20px;
+}
+
+input, select, button {
+  margin-right: 10px;
+  padding: 5px;
+}
